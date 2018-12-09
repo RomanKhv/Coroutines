@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsyncEngine", "AsyncEngine\AsyncEngine.vcxproj", "{49C7DABA-7B81-42BE-B162-9CD025A42E5C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Coroutine", "CoroutineSimple\Coroutine.vcxproj", "{0E8F15DF-61D8-4432-B4C3-BE62B9BA3096}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49C7DABA-7B81-42BE-B162-9CD025A42E5C}.Debug|x64.ActiveCfg = Debug|x64
+		{49C7DABA-7B81-42BE-B162-9CD025A42E5C}.Debug|x64.Build.0 = Debug|x64
+		{49C7DABA-7B81-42BE-B162-9CD025A42E5C}.Release|x64.ActiveCfg = Release|x64
+		{49C7DABA-7B81-42BE-B162-9CD025A42E5C}.Release|x64.Build.0 = Release|x64
+		{0E8F15DF-61D8-4432-B4C3-BE62B9BA3096}.Debug|x64.ActiveCfg = Debug|x64
+		{0E8F15DF-61D8-4432-B4C3-BE62B9BA3096}.Debug|x64.Build.0 = Debug|x64
+		{0E8F15DF-61D8-4432-B4C3-BE62B9BA3096}.Release|x64.ActiveCfg = Release|x64
+		{0E8F15DF-61D8-4432-B4C3-BE62B9BA3096}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {304AF7BA-6A53-4282-BE84-0853A6F8F3B0}
+	EndGlobalSection
+EndGlobal

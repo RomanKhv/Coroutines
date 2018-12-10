@@ -10,5 +10,6 @@
 #define PCH_H
 
 #include <boost/make_shared.hpp>
+#include "log.h"
 
 #endif //PCH_H

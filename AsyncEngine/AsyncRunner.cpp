@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "AsyncRunner.h"
-#include <log.h>
 
 //////////////////////////////////////////////////////////////////////
 
@@ -26,7 +25,9 @@ void AsyncTask_t::Start( const boost::function<void()>& user_async_proc )
 		{
 			log::scope log_this_func( "coroutine-function" );
 			_Yield = &yield;
+			_InMyContext = true;
 			user_async_proc();
+			_InMyContext = false;
 			_Yield = nullptr;
 		}
 	);

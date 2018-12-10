@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <memory>
-#include <log.h>
 #include "AsyncRunner.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -20,7 +19,7 @@ void OnShowFeature()
 	if ( _Task->IsActive() )
 	{
 		_Task->SetID( 273 );
-		_Task->Yield_();		// suspension point
+		_Task->Suspend();		// suspension point
 	}
 
 	_ASSERTE( !_builder_res.empty() );

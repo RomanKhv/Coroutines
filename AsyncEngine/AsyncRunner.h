@@ -13,7 +13,7 @@ public:
 	virtual void Start( const boost::function<void()>& ) = 0;
 	virtual void SetID( ID_t ) = 0;
 	virtual bool IsActive() const = 0;
-	virtual void Yield_() = 0;
+	virtual void Suspend() = 0;
 	virtual void Resume() = 0;
 	virtual bool HasCompleted() const = 0;
 	
@@ -42,17 +42,21 @@ public:
 		return _Coro || _Yield;
 	}
 
-	virtual void Yield_() override
+	virtual void Suspend() override
 	{
-//		log_line( __FUNCTION__ );
+		log::line( __FUNCTION__ );
 		_ASSERTE( IsActive() );
+		_ASSERTE( _InMyContext );
+		_InMyContext = false;
 		(*_Yield)(1);
 	}
 
 	virtual void Resume() override
 	{
-//		log_line( __FUNCTION__ );
+		log::line( __FUNCTION__ );
 		_ASSERTE( IsActive() );
+		_ASSERTE( !_InMyContext );
+		_InMyContext = true;
 		(*_Coro)();
 	}
 
@@ -78,6 +82,7 @@ private:
 	coro_ptr _Coro;
 	IAsyncTask::ID_t _ID;
 	coro_t::push_type* _Yield;
+	bool _InMyContext = false;
 };
 
 //////////////////////////////////////////////////////////////////////

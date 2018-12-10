@@ -9,6 +9,10 @@
 #ifndef PCH_H
 #define PCH_H
 
+#ifdef _DEBUG
+#define BOOST_LIB_DIAGNOSTIC
+#endif
+
 #include <boost/make_shared.hpp>
 #include "log.h"
 

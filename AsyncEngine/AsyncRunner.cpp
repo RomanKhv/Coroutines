@@ -20,8 +20,10 @@ IAsyncTaskPtr AsyncRunner::CreateTask()
 
 void AsyncTask_t::Start( const boost::function<void()>& user_async_proc )
 {
+	// !!! callable object must be passed into coroutine-lambda by copy !!!
+
 	_Coro = std::make_shared<coro_t::pull_type>( 
-		[this, &user_async_proc]( coro_t::push_type& yield )
+		[this, user_async_proc]( coro_t::push_type& yield )
 		{
 			log::scope log_this_func( "coroutine-function" );
 			_Yield = &yield;

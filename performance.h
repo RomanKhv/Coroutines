@@ -6,48 +6,47 @@ class PerfMeasure
 {
 	int _Value = 0;
 	const int my_index;
-	static int GlobalIndex;
 public:
 	PerfMeasure()
-		: my_index(++GlobalIndex)
+		: my_index(++GlobalIndex() )
 	{
-		NDefCtors++;
+		NDefCtors()++;
 // 		BOOST_TEST_MESSAGE( (boost::format(">> %d") % my_index).str().c_str() );
 	}
 	PerfMeasure( int v )
-		: my_index( ++GlobalIndex )
+		: my_index( ++GlobalIndex() )
 		, _Value( v )
 	{
-		NDefCtors++;
+		NDefCtors()++;
 	}
 	PerfMeasure( const PerfMeasure& rhs )
-		: my_index( ++GlobalIndex )
+		: my_index( ++GlobalIndex() )
 		, _Value( rhs._Value )
 	{
-		NCopyCtors++;
+		NCopyCtors()++;
 // 		BOOST_TEST_MESSAGE( (boost::format(">>& %d") % my_index).str().c_str() );
 	}
 	PerfMeasure( PerfMeasure&& rhs )
-		: my_index( ++GlobalIndex )
+		: my_index( ++GlobalIndex() )
 		, _Value( rhs._Value )
 	{	//emulate moving by moving value
 		rhs._Value = 0;
-		NMoveCtors++;
+		NMoveCtors()++;
 	}
 	~PerfMeasure()
 	{
-		NDtors++;
+		NDtors()++;
 // 		BOOST_TEST_MESSAGE( (boost::format("<< %d") % my_index).str().c_str() );
 	}
 	PerfMeasure& operator=( const PerfMeasure& rhs )
 	{
-		NCopyOps++;
+		NCopyOps()++;
 		_Value = rhs._Value;
 		return *this;
 	}
 	PerfMeasure& operator=( PerfMeasure&& rhs )
 	{
-		NMoveOps++;
+		NMoveOps()++;
 		_Value = rhs._Value;	//emulate moving by moving value
 		rhs._Value = 0;
 		return *this;
@@ -65,22 +64,20 @@ public:
 	{
 		return _Value < rhs._Value;
 	}
-public:
-	static int NDefCtors, NCopyCtors, NMoveCtors, NDtors, NCopyOps, NMoveOps;
 
+public:
+	static int& NDefCtors()		{ static int n = 0; return n; }
+	static int& NCopyCtors()	{ static int n = 0; return n; }
+	static int& NMoveCtors()	{ static int n = 0; return n; }
+	static int& NDtors()		{ static int n = 0; return n; }
+	static int& NCopyOps()		{ static int n = 0; return n; }
+	static int& NMoveOps()		{ static int n = 0; return n; }
+	static int& GlobalIndex()	{ static int n = 0; return n; }
 	static void ResetCounters()
 	{
-		NDefCtors = NCopyCtors = NMoveCtors = NDtors = NCopyOps = NMoveOps = 0;
+		NDefCtors() = NCopyCtors() = NMoveCtors() = NDtors() = NCopyOps() = NMoveOps() = 0;
 	}
 };
-
-int PerfMeasure::NDefCtors = 0;
-int PerfMeasure::NCopyCtors = 0;
-int PerfMeasure::NMoveCtors = 0;
-int PerfMeasure::NDtors = 0;
-int PerfMeasure::NCopyOps = 0;
-int PerfMeasure::NMoveOps = 0;
-int PerfMeasure::GlobalIndex = 0;
 
 #define CHECK_PERFORMANCE(ctors, cctors, mctors, cops, mops)	\
 	BOOST_CHECK_EQUAL( PerfMeasure::NDefCtors, ctors ); \
@@ -89,6 +86,15 @@ int PerfMeasure::GlobalIndex = 0;
 	BOOST_CHECK_EQUAL( PerfMeasure::NDtors, ctors + cctors + mctors ); \
 	BOOST_CHECK_EQUAL( PerfMeasure::NCopyOps, cops ); \
 	BOOST_CHECK_EQUAL( PerfMeasure::NMoveOps, mops ); \
+	PerfMeasure::ResetCounters();
+
+#define ASSERT_PERFORMANCE(ctors, cctors, mctors, cops, mops)	\
+	_ASSERTE( PerfMeasure::NDefCtors() == ctors ); \
+	_ASSERTE( PerfMeasure::NCopyCtors() == cctors ); \
+	_ASSERTE( PerfMeasure::NMoveCtors() == mctors ); \
+	_ASSERTE( PerfMeasure::NDtors() == ctors + cctors + mctors ); \
+	_ASSERTE( PerfMeasure::NCopyOps() == cops ); \
+	_ASSERTE( PerfMeasure::NMoveOps() == mops ); \
 	PerfMeasure::ResetCounters();
 
 //////////////////////////////////////////////////////////////////////

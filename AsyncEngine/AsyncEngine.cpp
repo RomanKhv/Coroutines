@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include "AsyncRunner.h"
+#include "../performance.h"
 
 //////////////////////////////////////////////////////////////////////
 
@@ -58,22 +59,26 @@ public:
 
 	void OnShowFeature( const std::string& uuid, EFeatureType type )
 	{
-		log::scope ls( __FUNCTION__ );
+		{
+			log::scope ls( __FUNCTION__ );
+			PerfMeasure pm;
 
-		_Task->Start(
-			[=]()
-			{
-				log::scope log_scope( "user async proc" );
+			_Task->Start(
+				[this, uuid, type, pm]()
+				{
+					log::scope log_scope( "user async proc" );
 
-				GLGeneratePlotVisu( uuid, type );
-				log::line( "if (isTreeNodeSelected) SelectColorbarAndVisuForPlot();" );
-				log::line( "m_CutPlotManipulator->Update()" );
+					GLGeneratePlotVisu( uuid, type );
+					log::line( "if (isTreeNodeSelected) SelectColorbarAndVisuForPlot();" );
+					log::line( "m_CutPlotManipulator->Update()" );
 
-				// The assertion will fail since
-				// captures for this lambda were taken prior to start of coroutine
-				_ASSERTE( type == ft_cutplot );
-			}
-		);
+					// The assertion will fail since
+					// captures for this lambda were taken prior to start of coroutine
+					_ASSERTE( type == ft_cutplot );
+				}
+			);
+		}
+		ASSERT_PERFORMANCE( 1, 1, 3, 0, 0 );
 	}
 };
 
